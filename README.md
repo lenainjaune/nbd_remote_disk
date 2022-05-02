@@ -121,7 +121,7 @@ Avant de tuer tout processus nbd-server, s'assurer qu'il n'y a plus aucune conne
 	tcp6       0      0 :::10809                :::*                    LISTEN      125928/nbd-server   
 	tcp6       0      0 192.168.0.15:10809      192.168.0.52:48736      ESTABLISHED 125931/nbd-server
 
-=> ici une connexion depuis **192.168.0.15**nbd-client -d /dev/nbd0 (```umount -l /chemin/montage``` suivi de ```nbd-client -d /chemin/disque_local_nbd/lie/disque_distant```)
+=> ici une connexion depuis **192.168.0.15** (```umount -l /chemin/montage``` suivi de ```nbd-client -d /chemin/disque_local_nbd/lie/disque_distant```)
 
 S'il y en a plus, on peut tuer les éventuels processus en cours ... :
 
@@ -145,7 +145,7 @@ S'il y en a plus, on peut tuer les éventuels processus en cours ... :
 	 done
 	) > nbd.conf
 
-Depuis le client la liste retournée par nbd-client -l affichera l'ID de disque et la taille :
+Depuis le client la liste retournée par afficher l'ID de disque et la taille :
 
 	root@client:~# 	nbd-client -l SERVER
 	Negotiation: ..
