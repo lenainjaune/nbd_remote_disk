@@ -6,6 +6,7 @@ Brouillon en attendant une vraie doc
 	root@goku:~# apt install nbd-serveur
 	root@goku:~# modprobe nbd
 
+	# Voir aussi "Serveur : auto configuration"
 	root@CZ-LIVE:~# cat < EOF > /etc/nbd-server/config
 	[generic]
 	# If you want to run everything as root rather than the nbd user, you
@@ -45,9 +46,11 @@ Brouillon en attendant une vraie doc
 			exportname = /dev/sda
 	EOF
 
-
+	# Exporter depuis configuration par défaut : /etc/nbd-server/config
 	root@CZ-LIVE:/dev# nbd-server
-	# rien ne s'affiche
+	# ou depuis autre configuration
+	root@CZ-LIVE:/dev# nbd-server -C /chemin/fichier/config
+	# => rien ne s'affiche, c'est normal !
 
 	# Si aucun processus, il y a surement une erreur de configuration
 	root@CZ-LIVE:/dev# ps aux | grep nbd
