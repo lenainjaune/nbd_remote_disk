@@ -129,4 +129,17 @@ Brouillon en attendant une vraie doc
 	 done
 	) > nbd.conf
 
+Depuis le client la liste retournée par nbd-client -l affichera l'ID de disque et la taille :
+	root@client:~# 	nbd-client -l SERVER
+	Negotiation: ..
+	loop0@@484,2M
+	sda@ata-QEMU_HARDDISK_QM00005@20G
+	sdb@usb-QEMU_QEMU_HARDDISK_1-0000:00:05.7-4-0:0@1G
+
+Et pour attacher :
+	root@client:~# nbd-client SERVER -N sda@ata-QEMU_HARDDISK_QM00005@20G /dev/nbd0
+	Negotiation: ..size = 20480MB
+	Connected /dev/nbd0
+
+
 
