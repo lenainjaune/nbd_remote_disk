@@ -2,7 +2,7 @@
 
 Brouillon en attendant une vraie doc
 
-  # SERVER (hôte qui partage un disque local)
+# SERVER (hôte qui partage un disque local)
 	root@goku:~# apt install nbd-serveur
 	root@goku:~# modprobe nbd
 
@@ -63,7 +63,7 @@ Brouillon en attendant une vraie doc
 
 
 
-	# CLIENT (hôte auquel on va attacher le disque à distance sur SERVER)
+# CLIENT (hôte auquel on va attacher le disque à distance sur SERVER)
 
 	root@goku:~# apt install nbd-client
 
@@ -108,3 +108,19 @@ Brouillon en attendant une vraie doc
 
 	# Pour détacher
 	root@goku:~# nbd-client -d /dev/nbd0
+	
+# Serveur : auto configuration
+	root@sever/# echo -e "[generic]\nuser=root\ngroup=root\nallowlist=true"
+	root@sever/# for d in $( lsblk -nd -o NAME ) ; do echo -e "[$d]\nexportname=$d" ; done
+	[generic]
+	user=root
+	group=root
+	allowlist=true
+	[loop0]
+	exportname=loop0
+	[sda]
+	exportname=sda
+	[sdb]
+	exportname=sdb
+
+
