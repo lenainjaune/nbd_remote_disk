@@ -113,6 +113,22 @@ Brouillon en attendant une vraie doc
 	root@goku:~# nbd-client -d /dev/nbd0
 	
 # Serveur : auto configuration
+Exporte automatiquement tous les disques locaux du serveur
+
+Avant de tuer tout processus nbd-server, s'assurer qu'il n'y a plus aucune connexion aux disques à distance :
+
+	root@server:~# netstat -atnp | grep nbd
+	tcp6       0      0 :::10809                :::*                    LISTEN      125928/nbd-server   
+	tcp6       0      0 192.168.0.15:10809      192.168.0.52:48736      ESTABLISHED 125931/nbd-server
+
+=> ici une connexion depuis **192.168.0.15**nbd-client -d /dev/nbd0 (```umount -l /chemin/montage``` suivi de ```nbd-client -d /chemin/disque_local_nbd/lie/disque_distant```)
+
+S'il y en a plus, on peut tuer les éventuels processus en cours ... :
+
+	root@server:~# pkill nbd-server
+
+... et auto-configurer le server :
+
 	root@sever/# ( \
 	 echo -e "[generic]\nuser=root\ngroup=root\nallowlist=true"
 	 for e in $( \
