@@ -113,17 +113,20 @@ Brouillon en attendant une vraie doc
 	root@goku:~# nbd-client -d /dev/nbd0
 	
 # Serveur : auto configuration
-	root@sever/# echo -e "[generic]\nuser=root\ngroup=root\nallowlist=true"
-	root@sever/# for d in $( lsblk -nd -o NAME ) ; do echo -e "[$d]\nexportname=$d" ; done
-	[generic]
-	user=root
-	group=root
-	allowlist=true
-	[loop0]
-	exportname=loop0
-	[sda]
-	exportname=sda
-	[sdb]
-	exportname=sdb
+	root@sever/# ( \
+	 echo -e "[generic]\nuser=root\ngroup=root\nallowlist=true"
+	 for e in $( \
+	   lsblk -nd -o NAME,SIZE | awk '$2 != "0B" { print $1 "|" $2 }' \
+	 ) ; do
+	  dev=$( echo $e | cut -d '|' -f 1 )
+	  id=$( \
+	   find /dev -type l \
+		-exec bash -c "l={} ; echo \$l \$( readlink \$l )" \; \
+		 | grep /by-id/.*$dev$ | cut -d ' ' -f 1 \
+		 | rev | cut -d '/' -f 1 | rev )
+	  size=$( echo $e | cut -d '|' -f 2 )
+	  echo -e "[$dev@$id@$size]\nexportname=/dev/$dev"
+	 done
+	) > nbd.conf
 
 
