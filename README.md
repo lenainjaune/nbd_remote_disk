@@ -129,7 +129,7 @@ S'il y en a plus, on peut tuer les éventuels processus en cours ... :
 
 ... et auto-configurer le server :
 
-	root@server/# ( \
+	root@server:~# ( \
 	 echo -e "[generic]\nuser=root\ngroup=root\nallowlist=true"
 	 for e in $( \
 	   lsblk -nd -o NAME,SIZE | awk '$2 != "0B" { print $1 "|" $2 }' \
