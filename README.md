@@ -159,5 +159,83 @@ Et pour attacher :
 	Negotiation: ..size = 20480MB
 	Connected /dev/nbd0
 
+# Exemple complet client/serveur :
+A titre d'essai j'ai attaché depuis un client une clé USB distante qui boote une LIVE session Clonezilla (voir [ici](https://github.com/lenainjaune/clonezilla/blob/main/README.md)) et à distance j'ai modifié le script utilisateur exécuté au boot donc pendant que la LIVE session était démarrée.
 
+=> Aucune erreur :D !
+
+Nota : il est à priori impossible de le faire depuis la LIVE session en RW
+
+
+```sh
+# Légende : C pour Client et S pour serveur
+@S# lsblk | grep -c ^nbd
+0
+@S# lsmod | grep -c nbd
+0
+@S# modprobe nbd
+@S# lsmod | grep nbd
+nbd                    53248  0
+@S# lsblk | grep ^nbd | head -n 1
+nbd0    43:0    0     0B  0 disk 
+@S# lsblk | grep -c ^nbd
+16
+@S# nbd-server -C /nbd.conf -d
+
+@S# lsblk -p | grep ^/dev | grep -v nbd
+/dev/loop0    7:0    0 484,2M  1 loop /usr/lib/live/mount/rootfs/filesystem.squashfs
+/dev/sda      8:0    0    20G  0 disk 
+/dev/sdb      8:16   0     1G  0 disk 
+@S# ps aux | grep nbd | grep -v grep
+root        3661  0.0  0.0  12060  4688 ?        Ss   15:42   0:01 nbd-server -C /nbd.conf
+@S# netstat -atnp | grep nbd-server
+tcp6       0      0 :::10809                :::*                    LISTEN      3661/nbd-server     
+
+@C# nbd-client -l CZ-LIVE.local
+Negotiation: ..
+loop0@@484,2M
+sda@ata-QEMU_HARDDISK_QM00005@20G
+sdb@usb-QEMU_QEMU_HARDDISK_1-0000:00:05.7-4-0:0@1G
+@C# nbd-client CZ-LIVE.local -N sdb@usb-QEMU_QEMU_HARDDISK_1-0000:00:05.7-4-0:0@1G /dev/nbd0
+nbd0
+Negotiation: ..size = 1024MB
+Connected /dev/nbd0
+
+@S# netstat -atnp | grep nbd-server
+tcp6       0      0 :::10809                :::*                    LISTEN      3661/nbd-server     
+tcp6       0      0 192.168.0.11:10809      192.168.0.52:56568      ESTABLISHED 3763/nbd-server 
+
+@C# lsblk /dev/nbd0
+NAME     MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+nbd0      43:0    0    1G  0 disk 
+└─nbd0p1  43:1    0 1024M  0 part
+@C# mount /dev/nbd0p1 /mnt/
+# ... faire des choses pour modifier la clé
+@C# umount -l /mnt/
+@C# nbd-client CZ-LIVE.local -d /dev/nbd0
+
+@S# netstat -atnp | grep nbd-server
+tcp6       0      0 :::10809                :::*                    LISTEN      3661/nbd-server 
+
+@C# nbd-client -l CZ-LIVE.local
+Negotiation: ..
+loop0@@484,2M
+sda@ata-QEMU_HARDDISK_QM00005@20G
+sdb@usb-QEMU_QEMU_HARDDISK_1-0000:00:05.7-4-0:0@1G
+
+@S# pkill nbd-server
+@S# ps aux | grep nbd | grep -vc grep
+0
+@S# netstat -atnp | grep -c nbd-server
+0
+
+@C# nbd-client -l CZ-LIVE.local
+Error: Socket failed: Connection refused
+
+@S# modprobe -r nbd
+@S# lsmod | grep -c nbd
+0
+@S# lsblk | grep -c ^nbd
+0
+```
 
