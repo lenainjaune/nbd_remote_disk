@@ -160,6 +160,9 @@ Et pour attacher :
 	Connected /dev/nbd0
 
 # Exemple complet client/serveur :
+
+TODO : ajouter l'installation du client et du serveur pour être vraiment complet
+
 A titre d'essai j'ai attaché depuis un client une clé USB distante qui boote une LIVE session Clonezilla (voir [ici](https://github.com/lenainjaune/clonezilla/blob/main/README.md)) et à distance j'ai modifié le script utilisateur exécuté au boot donc pendant que la LIVE session était démarrée.
 
 => Aucune erreur :D !
