@@ -3,7 +3,7 @@
 Brouillon en attendant une vraie doc
 
 # SERVER (hôte qui partage un disque local)
-	root@goku:~# apt install nbd-serveur
+	root@goku:~# apt install nbd-server
 	root@goku:~# modprobe nbd
 
 	# Voir aussi "Serveur : auto configuration"
