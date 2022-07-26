@@ -183,6 +183,9 @@ nbd                    53248  0
 nbd0    43:0    0     0B  0 disk 
 @S# lsblk | grep -c ^nbd
 16
+
+# Créer nbd.conf (voir dessus)
+
 @S# nbd-server -C /nbd.conf -d
 
 @S# lsblk -p | grep ^/dev | grep -v nbd
