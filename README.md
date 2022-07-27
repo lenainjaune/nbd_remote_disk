@@ -138,12 +138,14 @@ S'il y en a plus, on peut tuer les éventuels processus en cours ... :
 	  id=$( \
 	   find /dev -type l \
 		-exec bash -c "l={} ; echo \$l \$( readlink \$l )" \; \
-		 | grep /by-id/.*$dev$ | cut -d ' ' -f 1 \
+		 | grep /by-id/.*$dev$ | sort -r | head -n 1 | cut -d ' ' -f 1 \
 		 | rev | cut -d '/' -f 1 | rev )
 	  size=$( echo $e | cut -d '|' -f 2 )
 	  echo -e "[$dev@$id@$size]\nexportname=/dev/$dev"
 	 done
 	) > nbd.conf
+	
+Attention : il peut y avoir plusieurs liens qui identifient le même **dev** par **id** => on en conserve qu'un seul
 
 Depuis le client la liste retournée par afficher l'ID de disque et la taille :
 
