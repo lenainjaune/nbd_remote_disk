@@ -209,6 +209,11 @@ nbd0
 Negotiation: ..size = 1024MB
 Connected /dev/nbd0
 
+# Note : on peut faire un lien symbolique de /dev/nbd0 plus explicite (utile en p1v par exemple)
+@C# ln -s /dev/nbd0 /dev/sda@ata-QEMU_HARDDISK_QM00005@20G
+# ou
+@C# ln -s /dev/nbd0 /dev/ata-ST9500325AS_5VENVRLC
+
 @S# netstat -atnp | grep nbd-server
 tcp6       0      0 :::10809                :::*                    LISTEN      3661/nbd-server     
 tcp6       0      0 192.168.0.11:10809      192.168.0.52:56568      ESTABLISHED 3763/nbd-server 
