@@ -1,3 +1,57 @@
+RO en attente de la fin de migration
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # nbd_remote_disk
 
 Brouillon en attendant une vraie doc
